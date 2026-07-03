@@ -1,7 +1,7 @@
 ---
-title: "Authenticate Requests to the Viithii API"
+title: "Viithii API Authentication: Keys and Bearer Tokens"
 sidebarTitle: "Authentication"
-description: "Learn how to generate and use Viithii API keys to authenticate every request you make to the Viithii REST API."
+description: "Step-by-step guide to generating Viithii API keys, setting the Authorization header, and securely managing live and test credentials."
 ---
 
 Every request to the Viithii API must include a valid API key. The API uses Bearer token authentication, which means you attach your key to the `Authorization` header of each HTTP request. This page walks you through generating your first API key, using it in requests, and managing key security.
@@ -35,7 +35,7 @@ You can generate an API key directly from the Viithii dashboard. Each key is sco
 
 Include your API key as a Bearer token in the `Authorization` header of every request you send to the API. The format is:
 
-```
+```http
 Authorization: Bearer <your_api_key>
 ```
 
