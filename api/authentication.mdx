@@ -1,0 +1,102 @@
+---
+title: "Authenticate Requests to the Viithii API"
+sidebarTitle: "Authentication"
+description: "Learn how to generate and use Viithii API keys to authenticate every request you make to the Viithii REST API."
+---
+
+Every request to the Viithii API must include a valid API key. The API uses Bearer token authentication, which means you attach your key to the `Authorization` header of each HTTP request. This page walks you through generating your first API key, using it in requests, and managing key security.
+
+## Getting Your API Key
+
+You can generate an API key directly from the Viithii dashboard. Each key is scoped to your account and inherits your account's permissions.
+
+<Steps>
+  <Step title="Log in to your Viithii account">
+    Navigate to [app.viithiisys.com](https://app.viithiisys.com) and sign in with your credentials.
+  </Step>
+  <Step title="Open Settings">
+    Click your profile avatar in the top-right corner and select **Settings** from the dropdown menu.
+  </Step>
+  <Step title="Go to the Developer section">
+    In the left sidebar of the Settings page, click **Developer**.
+  </Step>
+  <Step title="Navigate to API Keys">
+    Select the **API Keys** tab at the top of the Developer page.
+  </Step>
+  <Step title="Generate a new key">
+    Click **Generate New Key**, give it a descriptive label (e.g. `production-integration` or `local-dev`), and confirm.
+  </Step>
+  <Step title="Copy and store your key securely">
+    Your new key is displayed **once**. Copy it immediately and store it in a secure location such as a password manager or secrets vault. You will not be able to retrieve it again.
+  </Step>
+</Steps>
+
+## Using Your API Key
+
+Include your API key as a Bearer token in the `Authorization` header of every request you send to the API. The format is:
+
+```
+Authorization: Bearer <your_api_key>
+```
+
+The examples below show how to authenticate a request to list your properties across three common tools and languages:
+
+<CodeGroup>
+
+```bash curl
+curl https://api.viithiisys.com/v1/properties \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json"
+```
+
+```javascript JavaScript
+const response = await fetch('https://api.viithiisys.com/v1/properties', {
+  headers: {
+    'Authorization': 'Bearer vth_live_xxxxxxxxxxxx',
+    'Content-Type': 'application/json'
+  }
+});
+const data = await response.json();
+```
+
+```python Python
+import requests
+
+headers = {
+    'Authorization': 'Bearer vth_live_xxxxxxxxxxxx',
+    'Content-Type': 'application/json'
+}
+response = requests.get('https://api.viithiisys.com/v1/properties', headers=headers)
+data = response.json()
+```
+
+</CodeGroup>
+
+## API Key Types
+
+Viithii issues two types of API keys so you can safely develop and test without affecting your live data:
+
+| Key Type | Prefix | Use Case |
+|---|---|---|
+| **Live** | `vth_live_` | Production integrations that interact with real data. |
+| **Test** | `vth_test_` | Local development and testing against a sandboxed environment. |
+
+Test keys behave identically to live keys but operate in an isolated environment. No data created or modified with a test key affects your production account. Always use a test key during development and switch to a live key only when you deploy to production.
+
+## Revoking Keys
+
+If an API key is compromised or no longer needed, revoke it immediately to prevent unauthorized access:
+
+1. Navigate to **Settings → Developer → API Keys** in the Viithii dashboard.
+2. Locate the key you want to revoke in the list.
+3. Click the **Revoke** button next to the key and confirm the action.
+
+Revoked keys stop working instantly. Any requests made with a revoked key will receive a `401 Unauthorized` response with the error code `unauthorized`.
+
+<Warning>
+  Never expose your API keys in client-side code, public GitHub repositories, or any other publicly accessible location. If you accidentally commit a key, revoke it immediately and generate a replacement.
+</Warning>
+
+<Tip>
+  Store your API keys as environment variables (e.g. `VIITHII_API_KEY`) rather than hard-coding them in your source files. This keeps your keys out of version control and makes it easy to swap between test and live keys across environments.
+</Tip>

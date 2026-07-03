@@ -1,0 +1,93 @@
+---
+title: "Leases: Agreements Between You and Tenants"
+sidebarTitle: "Leases"
+description: "Learn how Viithii models lease agreements — from draft to expiration — including e-signatures, key fields, and the full lease lifecycle."
+---
+
+A lease record in Viithii is the authoritative, digital representation of the rental agreement between you and your tenant. It binds a specific tenant to a specific unit for a defined period and at a defined rent, and it drives nearly every downstream workflow in the platform — payment schedules, late fee calculations, maintenance eligibility, and portal access all depend on an active lease existing. Creating a well-structured lease from the start ensures Viithii can automate the routine tasks so you can focus on managing relationships.
+
+## Lease Types
+
+Viithii supports three lease structures to match the full range of rental arrangements:
+
+<CardGroup cols={3}>
+  <Card title="Fixed-Term" icon="calendar-check">
+    A lease with a defined start date and end date — the most common residential arrangement. Viithii automatically marks the lease as **Expiring Soon** 60 days before the end date and prompts you to renew or terminate.
+  </Card>
+  <Card title="Month-to-Month" icon="arrows-rotate">
+    An open-ended lease that renews automatically each month. Either party can terminate with the notice period defined in the lease record. Use this type for tenants transitioning out of a fixed term or for flexible short-stay arrangements.
+  </Card>
+  <Card title="Short-Term / Vacation" icon="plane-departure">
+    A lease spanning days to a few weeks, suited to vacation rentals or corporate housing. Short-term leases support nightly or weekly rent calculations and a simplified checkout workflow.
+  </Card>
+</CardGroup>
+
+## Lease Lifecycle
+
+Every lease in Viithii moves through a defined set of statuses from creation to conclusion. Understanding these stages helps you act at the right time.
+
+<Steps>
+  <Step title="Draft">
+    A lease record has been created but not yet sent for signing or activated. You can freely edit all fields in Draft status. Use this stage to review rent amounts, deposit requirements, and clause attachments before committing.
+  </Step>
+  <Step title="Active">
+    The lease has been fully executed (signed by all parties) and the lease start date has arrived. Rent charges are generated automatically, and the tenant gains access to the Tenant Portal. Editing key financial fields requires creating an addendum.
+  </Step>
+  <Step title="Expiring Soon">
+    Viithii automatically sets this status 60 days before the end date of a fixed-term lease. You'll see renewal prompts on your dashboard and can send a renewal offer directly to the tenant from this view.
+  </Step>
+  <Step title="Expired / Renewed / Terminated">
+    A lease exits the active state in one of three ways: it reaches its end date without renewal (**Expired**), the tenant signs a new or extended lease (**Renewed**), or either party ends the tenancy early with proper notice (**Terminated**). In all three cases, the lease record is preserved in full for your records.
+  </Step>
+</Steps>
+
+## Key Lease Fields
+
+When you create or edit a lease in Draft status, you configure the following fields:
+
+<ParamField path="start_date" type="date" required>
+  The date the tenancy officially begins. Rent charges and the tenant's portal access activate on this date.
+</ParamField>
+
+<ParamField path="end_date" type="date">
+  The date the lease term concludes. Required for Fixed-Term leases; leave blank for Month-to-Month. Viithii uses this date to trigger the Expiring Soon status and renewal reminders.
+</ParamField>
+
+<ParamField path="monthly_rent" type="number" required>
+  The recurring rent amount due each month. This figure appears on every rent charge generated for the lease and overrides the unit's default rent amount.
+</ParamField>
+
+<ParamField path="security_deposit" type="number">
+  The one-time deposit collected at lease signing. Viithii records this as a separate payment charge and tracks it in escrow until disposition at move-out.
+</ParamField>
+
+<ParamField path="late_fee_policy" type="object">
+  Defines the grace period (in days after the due date) and the late fee structure — either a flat dollar amount or a percentage of the monthly rent. Viithii applies late fees automatically when the grace period expires without a full payment.
+</ParamField>
+
+<ParamField path="rent_due_day" type="integer" required>
+  The day of the month rent is due (e.g., `1` for the 1st). Viithii generates rent charge records on this day each month for the duration of the lease.
+</ParamField>
+
+## E-Signatures
+
+Viithii includes built-in digital signing so you never need a third-party e-signature tool for standard leases. When you finalize a lease and click **Send for Signature**, the platform:
+
+1. Generates a PDF version of the lease with all configured fields and any attached addenda.
+2. Emails a secure signing link to each party — the tenant(s) and you as the landlord or your designated representative.
+3. Guides each signer through the document with clearly marked signature and initial fields.
+4. Notifies all parties by email once every required signature has been collected.
+5. Automatically moves the lease status to **Active** on the configured start date.
+
+<Note>
+  Once all parties have signed, Viithii stores the fully executed lease PDF in the lease record under the **Documents** tab. Both you and your tenant can download this PDF at any time from their respective dashboards. Executed documents are retained indefinitely and are never deleted, even after a lease expires or is terminated.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Lease Management Guide" icon="file-contract" href="/guides/lease-management">
+    Learn how to create, send for signature, renew, and terminate leases step by step.
+  </Card>
+  <Card title="Manage Units" icon="door-open" href="/guides/add-property">
+    Before creating a lease, make sure your property and units are set up correctly.
+  </Card>
+</CardGroup>

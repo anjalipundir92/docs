@@ -1,0 +1,89 @@
+---
+title: "Understanding Tenants and Tenant Profiles"
+sidebarTitle: "Tenants"
+description: "Discover how Viithii models tenants — from prospect to active resident — and how the Tenant Portal empowers self-service for renters."
+---
+
+In Viithii, a **tenant** is any individual or entity that occupies or intends to occupy one of your units. Tenant records are the human side of your property management workflow — they store contact details, identity documents, and lease history, and they give residents access to the self-service Tenant Portal. Every active lease must have at least one tenant attached to it, and a single tenant can appear on multiple leases over time (for example, if they move between units in your portfolio).
+
+## Tenant Profile
+
+A tenant profile is the central record Viithii uses to identify and communicate with a renter. When you onboard a tenant, you fill in the following fields:
+
+<ParamField path="full_name" type="string" required>
+  The tenant's legal full name as it will appear on lease agreements and payment receipts.
+</ParamField>
+
+<ParamField path="email" type="string" required>
+  The primary email address used for Tenant Portal invitations, payment confirmations, and maintenance updates.
+</ParamField>
+
+<ParamField path="phone" type="string">
+  A mobile or landline number for direct contact. Viithii uses this for SMS rent reminders if you enable them.
+</ParamField>
+
+<ParamField path="government_id" type="object">
+  Upload a scan or photo of a government-issued ID (passport, driver's license, or national ID). Viithii stores the document securely and links it to the tenant profile for reference during screening.
+</ParamField>
+
+<ParamField path="emergency_contact" type="object">
+  Name, relationship, and phone number of a person to contact in emergencies. This information is visible only to property managers — tenants cannot see or edit it in the portal.
+</ParamField>
+
+<ParamField path="move_in_date" type="date">
+  The date the tenant physically moved into the unit. This may differ from the lease start date and is used for maintenance scheduling and tenant anniversary reporting.
+</ParamField>
+
+## Tenant Status
+
+Viithii assigns every tenant one of three statuses that reflects where they are in your leasing lifecycle:
+
+<Accordion title="Prospect">
+  A prospective tenant has been added to Viithii — often after an inquiry or application — but has not yet signed a lease. Use this status to track leads and move them through your screening process. Prospects do not have Tenant Portal access.
+</Accordion>
+
+<Accordion title="Active">
+  An active tenant has a current, live lease on one of your units. Active tenants can log in to the Tenant Portal to pay rent, submit maintenance requests, and view their lease documents. Viithii automatically moves a tenant to Active status when their lease becomes Active.
+</Accordion>
+
+<Accordion title="Past Tenant">
+  A past tenant no longer has an active lease in your portfolio. Their profile, payment history, and maintenance records are preserved for reference and reporting. Past tenants lose Tenant Portal access once their lease expires or is terminated.
+</Accordion>
+
+## Tenant Portal
+
+The Tenant Portal is a secure, browser-based self-service hub that gives active tenants direct visibility into their tenancy — reducing the volume of routine requests you handle manually. Through the portal, tenants can:
+
+- **Pay rent** online via ACH bank transfer or credit/debit card
+- **View payment history** and download receipts
+- **Submit maintenance requests** with photos and priority notes
+- **Track maintenance ticket status** in real time
+- **Download lease documents** and signed addenda
+
+<Steps>
+  <Step title="Create the Tenant Profile">
+    Add the tenant's name, email, and contact details in Viithii. Make sure the email address is accurate — it becomes their portal login.
+  </Step>
+  <Step title="Attach the Tenant to a Lease">
+    Link the tenant profile to an active or upcoming lease on one of your units.
+  </Step>
+  <Step title="Send the Portal Invitation">
+    From the tenant's profile, click **Invite to Portal**. Viithii sends an email with a secure link to set a password and activate their account.
+  </Step>
+  <Step title="Tenant Activates Their Account">
+    The tenant follows the email link, sets a password, and lands on their personalized dashboard.
+  </Step>
+</Steps>
+
+<Tip>
+  Send the Tenant Portal invitation at lease signing so tenants arrive on move-in day already set up to pay rent and submit requests. Early activation leads to faster first-month payment collection and fewer "how do I pay?" calls.
+</Tip>
+
+<CardGroup cols={2}>
+  <Card title="Onboard a Tenant" icon="user-plus" href="/guides/onboard-tenant">
+    Walk through the full tenant onboarding process — from creating a profile to sending the portal invitation.
+  </Card>
+  <Card title="Collect Rent" icon="money-bill" href="/guides/collect-rent">
+    Learn how to configure rent charges, set up autopay, and track payments from your tenants.
+  </Card>
+</CardGroup>

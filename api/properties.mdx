@@ -1,0 +1,318 @@
+---
+title: "Properties API — List, Create, and Update"
+sidebarTitle: "Properties"
+description: "Use the Properties API to retrieve, create, update, and manage all properties and units in your Viithii account."
+---
+
+The Properties API is the foundation of the Viithii data model. Every tenant, lease, and maintenance request belongs to a unit that belongs to a property. Use these endpoints to create and manage your property portfolio, retrieve unit availability, and update property details as your portfolio evolves.
+
+---
+
+## GET /properties
+
+Returns a paginated list of all properties in your account. You can filter results by status to narrow the list to only active or inactive properties.
+
+### Query Parameters
+
+<ParamField query="page" type="integer" default="1">
+  The page number to retrieve.
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="20">
+  Number of properties to return per page. Maximum value is `100`.
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by property status. Accepted values: `active`, `inactive`.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl https://api.viithiisys.com/v1/properties?status=active&page=1&per_page=20 \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": [
+    {
+      "id": "prop_abc123",
+      "name": "Maplewood Apartments",
+      "address": {
+        "street": "412 Maplewood Drive",
+        "city": "Austin",
+        "state": "TX",
+        "zip": "78701"
+      },
+      "type": "multi_family",
+      "status": "active",
+      "unit_count": 24,
+      "created_at": "2023-03-15T08:30:00Z"
+    },
+    {
+      "id": "prop_def456",
+      "name": "Riverside Single Family",
+      "address": {
+        "street": "88 Riverside Lane",
+        "city": "Austin",
+        "state": "TX",
+        "zip": "78702"
+      },
+      "type": "single_family",
+      "status": "active",
+      "unit_count": 1,
+      "created_at": "2023-07-22T14:15:00Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 2
+  }
+}
+```
+
+---
+
+## POST /properties
+
+Creates a new property in your account. At minimum you must provide a name and address. Viithii will assign a unique `id` and set the initial `status` to `active`.
+
+### Body Parameters
+
+<ParamField body="name" type="string" required>
+  A human-readable name for the property (e.g. `"Maplewood Apartments"`).
+</ParamField>
+
+<ParamField body="address" type="object" required>
+  The physical address of the property.
+  <Expandable title="address fields">
+    <ParamField body="street" type="string" required>
+      Street number and name (e.g. `"412 Maplewood Drive"`).
+    </ParamField>
+    <ParamField body="city" type="string" required>
+      City name.
+    </ParamField>
+    <ParamField body="state" type="string" required>
+      Two-letter US state code (e.g. `"TX"`).
+    </ParamField>
+    <ParamField body="zip" type="string" required>
+      Five-digit ZIP code.
+    </ParamField>
+  </Expandable>
+</ParamField>
+
+<ParamField body="type" type="string">
+  Property type. Accepted values: `single_family`, `multi_family`, `commercial`, `condo`. Defaults to `single_family`.
+</ParamField>
+
+<ParamField body="description" type="string">
+  An optional free-text description of the property.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl -X POST https://api.viithiisys.com/v1/properties \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "name": "Elmwood Heights",
+    "address": {
+      "street": "290 Elmwood Blvd",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75201"
+    },
+    "type": "multi_family",
+    "description": "12-unit apartment complex built in 2018."
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "prop_ghi789",
+    "name": "Elmwood Heights",
+    "address": {
+      "street": "290 Elmwood Blvd",
+      "city": "Dallas",
+      "state": "TX",
+      "zip": "75201"
+    },
+    "type": "multi_family",
+    "status": "active",
+    "unit_count": 0,
+    "description": "12-unit apartment complex built in 2018.",
+    "created_at": "2024-06-01T09:00:00Z"
+  }
+}
+```
+
+---
+
+## GET /properties/{id}
+
+Returns the full details of a single property identified by its `id`.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the property (e.g. `prop_abc123`).
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl https://api.viithiisys.com/v1/properties/prop_abc123 \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "prop_abc123",
+    "name": "Maplewood Apartments",
+    "address": {
+      "street": "412 Maplewood Drive",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78701"
+    },
+    "type": "multi_family",
+    "status": "active",
+    "unit_count": 24,
+    "description": "A well-maintained 24-unit complex near downtown Austin.",
+    "created_at": "2023-03-15T08:30:00Z"
+  }
+}
+```
+
+---
+
+## GET /properties/{id}/units
+
+Returns all units belonging to a specific property. Use this endpoint to check availability, review rent amounts, or find vacant units before assigning a new tenant.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the property.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl https://api.viithiisys.com/v1/properties/prop_abc123/units \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": [
+    {
+      "id": "unit_101a",
+      "unit_number": "101",
+      "bedrooms": 2,
+      "bathrooms": 1,
+      "sq_ft": 850,
+      "rent_amount": 1450.00,
+      "status": "occupied"
+    },
+    {
+      "id": "unit_102a",
+      "unit_number": "102",
+      "bedrooms": 1,
+      "bathrooms": 1,
+      "sq_ft": 620,
+      "rent_amount": 1100.00,
+      "status": "vacant"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 24
+  }
+}
+```
+
+---
+
+## PATCH /properties/{id}
+
+Updates one or more fields on an existing property. Only include the fields you want to change; all other fields remain unchanged.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the property to update.
+</ParamField>
+
+### Body Parameters
+
+<ParamField body="name" type="string">
+  Updated property name.
+</ParamField>
+
+<ParamField body="address" type="object">
+  Updated address. You may supply any subset of address sub-fields.
+</ParamField>
+
+<ParamField body="type" type="string">
+  Updated property type. Accepted values: `single_family`, `multi_family`, `commercial`, `condo`.
+</ParamField>
+
+<ParamField body="description" type="string">
+  Updated description.
+</ParamField>
+
+<ParamField body="status" type="string">
+  Set to `inactive` to archive the property, or `active` to restore it.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl -X PATCH https://api.viithiisys.com/v1/properties/prop_abc123 \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "description": "Renovated 24-unit complex with updated amenities as of 2024."
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "prop_abc123",
+    "name": "Maplewood Apartments",
+    "address": {
+      "street": "412 Maplewood Drive",
+      "city": "Austin",
+      "state": "TX",
+      "zip": "78701"
+    },
+    "type": "multi_family",
+    "status": "active",
+    "unit_count": 24,
+    "description": "Renovated 24-unit complex with updated amenities as of 2024.",
+    "created_at": "2023-03-15T08:30:00Z"
+  }
+}
+```
+
+<Note>
+  To archive a property without deleting it, send a PATCH request with `"status": "inactive"`. Inactive properties are hidden from default list views but all associated data (tenants, leases, payments) is preserved and remains accessible via the API.
+</Note>

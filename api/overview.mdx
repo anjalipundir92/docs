@@ -1,0 +1,97 @@
+---
+title: "Viithii REST API Reference Overview"
+sidebarTitle: "Overview"
+description: "Explore the Viithii REST API to manage properties, tenants, leases, payments, and maintenance requests programmatically."
+---
+
+The Viithii REST API gives you programmatic access to every resource in your property management account. You can automate workflows, sync data with third-party tools, and build custom integrations on top of the same infrastructure that powers the Viithii dashboard. All API interactions use standard HTTP methods, JSON request and response bodies, and Bearer token authentication.
+
+## Base URL
+
+Every API request must be sent to the following base URL:
+
+```
+https://api.viithiisys.com/v1
+```
+
+All endpoints are versioned under `/v1`. When breaking changes are introduced, a new version path will be announced with a migration period before the previous version is deprecated.
+
+## Request Format
+
+Send all request bodies as JSON and include the appropriate headers with every request:
+
+| Header | Value |
+|---|---|
+| `Content-Type` | `application/json` |
+| `Authorization` | `Bearer <your_api_key>` |
+
+Requests that include a body (POST, PATCH) must set `Content-Type: application/json`. Requests without a body (GET, DELETE) only require the `Authorization` header.
+
+## Response Format
+
+Every response from the Viithii API is a JSON object. Successful responses wrap the resource or resource list in a top-level `data` field. List responses also include a `meta` object with pagination details.
+
+**Success response:**
+
+```json
+{
+  "data": { "..." : "..." },
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 145
+  }
+}
+```
+
+**Error response:**
+
+When a request fails, the response contains a top-level `error` object with a machine-readable `code` and a human-readable `message`:
+
+```json
+{
+  "error": {
+    "code": "not_found",
+    "message": "The requested resource was not found."
+  }
+}
+```
+
+## Pagination
+
+List endpoints use page-based pagination. Control the page and page size using the following query parameters:
+
+| Parameter | Type | Default | Description |
+|---|---|---|---|
+| `page` | integer | `1` | The page number to retrieve. |
+| `per_page` | integer | `20` | Number of results per page. Maximum is `100`. |
+
+The `meta` object in every list response includes a `total` field indicating the total number of records matching your query, which you can use to calculate the number of pages.
+
+## Rate Limits
+
+The Viithii API enforces a limit of **1,000 requests per minute** per API key. If you exceed this limit, the API returns a `429 Too Many Requests` response. The response includes a `Retry-After` header indicating the number of seconds to wait before retrying.
+
+```http
+HTTP/1.1 429 Too Many Requests
+Retry-After: 30
+```
+
+Design your integration to respect the `Retry-After` value and implement exponential backoff for robust error handling.
+
+## Error Codes
+
+The table below lists all error codes you may encounter in the `error.code` field:
+
+| Code | HTTP Status | Description |
+|---|---|---|
+| `unauthorized` | 401 | The API key is missing or invalid. |
+| `forbidden` | 403 | The API key does not have permission to perform this action. |
+| `not_found` | 404 | The requested resource does not exist. |
+| `validation_error` | 422 | The request body contains invalid or missing fields. |
+| `rate_limited` | 429 | You have exceeded the rate limit for your API key. |
+| `server_error` | 500 | An unexpected error occurred on the Viithii servers. |
+
+<Note>
+  Before making your first API call, make sure you have generated an API key and understand how to include it in your requests. See the [Authentication](/api/authentication) page for a step-by-step guide.
+</Note>

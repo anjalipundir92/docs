@@ -1,0 +1,289 @@
+---
+title: "Tenants API — Create and Manage Tenant Records"
+sidebarTitle: "Tenants"
+description: "Use the Tenants API to create tenant profiles, manage contact details, assign units, and send tenant portal invitations."
+---
+
+The Tenants API lets you manage every person who rents from you — from initial prospect through active tenant to past resident. You can create and update tenant profiles, link tenants to units, and trigger portal invitation emails so tenants can pay rent and submit maintenance requests online. Tenant records persist after a lease ends, giving you a complete history for future reference.
+
+---
+
+## GET /tenants
+
+Returns a paginated list of tenants in your account. Filter by status or property to narrow results for a specific building or tenant lifecycle stage.
+
+### Query Parameters
+
+<ParamField query="status" type="string">
+  Filter tenants by their current status. Accepted values: `prospect`, `active`, `past`.
+</ParamField>
+
+<ParamField query="property_id" type="string">
+  Return only tenants assigned to units within the specified property (e.g. `prop_abc123`).
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  The page number to retrieve.
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="20">
+  Number of results per page. Maximum value is `100`.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl "https://api.viithiisys.com/v1/tenants?status=active&property_id=prop_abc123" \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": [
+    {
+      "id": "tnt_xyz789",
+      "first_name": "Sarah",
+      "last_name": "Okonkwo",
+      "email": "sarah.okonkwo@email.com",
+      "phone": "+15124480192",
+      "status": "active",
+      "unit_id": "unit_101a",
+      "move_in_date": "2023-09-01"
+    },
+    {
+      "id": "tnt_mno345",
+      "first_name": "James",
+      "last_name": "Hartwell",
+      "email": "j.hartwell@email.com",
+      "phone": "+15126673344",
+      "status": "active",
+      "unit_id": "unit_103a",
+      "move_in_date": "2024-01-15"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 2
+  }
+}
+```
+
+---
+
+## POST /tenants
+
+Creates a new tenant record. You can create a tenant as a prospect before assigning them a unit, or provide a `unit_id` and `move_in_date` to immediately associate them with a unit.
+
+### Body Parameters
+
+<ParamField body="first_name" type="string" required>
+  Tenant's first name.
+</ParamField>
+
+<ParamField body="last_name" type="string" required>
+  Tenant's last name.
+</ParamField>
+
+<ParamField body="email" type="string" required>
+  Tenant's email address. Must be unique across your account. Used to send portal invitations.
+</ParamField>
+
+<ParamField body="phone" type="string">
+  Tenant's phone number in E.164 format (e.g. `+15124480192`).
+</ParamField>
+
+<ParamField body="date_of_birth" type="string">
+  Tenant's date of birth in `YYYY-MM-DD` format.
+</ParamField>
+
+<ParamField body="unit_id" type="string">
+  The ID of the unit to assign this tenant to (e.g. `unit_101a`).
+</ParamField>
+
+<ParamField body="move_in_date" type="string">
+  The tenant's move-in date in `YYYY-MM-DD` format.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl -X POST https://api.viithiisys.com/v1/tenants \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "first_name": "Maria",
+    "last_name": "Chen",
+    "email": "maria.chen@email.com",
+    "phone": "+15128889900",
+    "date_of_birth": "1990-04-22",
+    "unit_id": "unit_102a",
+    "move_in_date": "2024-07-01"
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "tnt_pqr654",
+    "first_name": "Maria",
+    "last_name": "Chen",
+    "email": "maria.chen@email.com",
+    "phone": "+15128889900",
+    "date_of_birth": "1990-04-22",
+    "status": "prospect",
+    "unit_id": "unit_102a",
+    "move_in_date": "2024-07-01",
+    "created_at": "2024-06-05T11:30:00Z"
+  }
+}
+```
+
+---
+
+## GET /tenants/{id}
+
+Returns the full profile for a single tenant identified by their `id`.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the tenant (e.g. `tnt_xyz789`).
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl https://api.viithiisys.com/v1/tenants/tnt_xyz789 \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "tnt_xyz789",
+    "first_name": "Sarah",
+    "last_name": "Okonkwo",
+    "email": "sarah.okonkwo@email.com",
+    "phone": "+15124480192",
+    "date_of_birth": "1988-11-03",
+    "status": "active",
+    "unit_id": "unit_101a",
+    "move_in_date": "2023-09-01",
+    "portal_invited_at": "2023-08-25T10:00:00Z",
+    "created_at": "2023-08-20T08:45:00Z"
+  }
+}
+```
+
+---
+
+## PATCH /tenants/{id}
+
+Updates one or more fields on an existing tenant record. Only include the fields you want to change.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the tenant to update.
+</ParamField>
+
+### Body Parameters
+
+<ParamField body="first_name" type="string">
+  Updated first name.
+</ParamField>
+
+<ParamField body="last_name" type="string">
+  Updated last name.
+</ParamField>
+
+<ParamField body="email" type="string">
+  Updated email address. Must remain unique across your account.
+</ParamField>
+
+<ParamField body="phone" type="string">
+  Updated phone number in E.164 format.
+</ParamField>
+
+<ParamField body="unit_id" type="string">
+  Updated unit assignment.
+</ParamField>
+
+<ParamField body="move_in_date" type="string">
+  Updated move-in date in `YYYY-MM-DD` format.
+</ParamField>
+
+<ParamField body="status" type="string">
+  Updated tenant status. Accepted values: `prospect`, `active`, `past`.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl -X PATCH https://api.viithiisys.com/v1/tenants/tnt_xyz789 \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "phone": "+15124559900"
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "tnt_xyz789",
+    "first_name": "Sarah",
+    "last_name": "Okonkwo",
+    "email": "sarah.okonkwo@email.com",
+    "phone": "+15124559900",
+    "status": "active",
+    "unit_id": "unit_101a",
+    "move_in_date": "2023-09-01",
+    "created_at": "2023-08-20T08:45:00Z"
+  }
+}
+```
+
+---
+
+## POST /tenants/{id}/invite
+
+Sends or resends a tenant portal invitation email to the tenant. The email contains a link that lets the tenant set up their password and access the Viithii tenant portal to pay rent, view lease documents, and submit maintenance requests. You can call this endpoint again at any time to resend the invitation.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the tenant to invite.
+</ParamField>
+
+No request body is required for this endpoint.
+
+### Example Request
+
+```bash curl
+curl -X POST https://api.viithiisys.com/v1/tenants/tnt_xyz789/invite \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "invited_at": "2024-06-01T10:00:00Z"
+  }
+}
+```
+
+<Tip>
+  Use the `property_id` query parameter when calling `GET /tenants` to instantly retrieve all tenants living in a specific building. This is useful for bulk operations like sending announcements or generating a rent roll for a single property.
+</Tip>

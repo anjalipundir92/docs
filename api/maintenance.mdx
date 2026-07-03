@@ -1,0 +1,253 @@
+---
+title: "Maintenance API — Work Orders and Requests"
+sidebarTitle: "Maintenance"
+description: "Use the Maintenance API to create and manage work orders, assign requests to staff, and track resolution status across your portfolio."
+---
+
+The Maintenance API lets you create, track, and resolve work orders across all of your properties. Whether a request originates from a tenant in the portal or you create it directly via the API, every maintenance record flows through the same lifecycle: open → in progress → resolved → closed. Use this API to integrate with your field operations tools, assign work orders to your maintenance team, and keep a full audit trail of every repair and service request.
+
+---
+
+## GET /maintenance
+
+Returns a paginated list of maintenance requests. Apply filters to focus on open emergencies, work orders for a specific property, or requests at a particular stage of resolution.
+
+### Query Parameters
+
+<ParamField query="status" type="string">
+  Filter by request status. Accepted values: `open`, `in_progress`, `resolved`, `closed`.
+</ParamField>
+
+<ParamField query="property_id" type="string">
+  Return requests for all units within a specific property (e.g. `prop_abc123`).
+</ParamField>
+
+<ParamField query="priority" type="string">
+  Filter by priority level. Accepted values: `low`, `medium`, `high`, `emergency`.
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  The page number to retrieve.
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="20">
+  Number of results per page. Maximum value is `100`.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl "https://api.viithiisys.com/v1/maintenance?status=open&priority=emergency&property_id=prop_abc123" \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": [
+    {
+      "id": "mnt_qqq111",
+      "title": "Burst pipe under kitchen sink",
+      "description": "Water is leaking heavily under the kitchen sink. Tenant has shut off the valve.",
+      "unit_id": "unit_101a",
+      "tenant_id": "tnt_xyz789",
+      "priority": "emergency",
+      "status": "open",
+      "category": "plumbing",
+      "created_at": "2024-06-10T06:45:00Z",
+      "updated_at": "2024-06-10T06:45:00Z"
+    },
+    {
+      "id": "mnt_rrr222",
+      "title": "No heat in bedroom",
+      "description": "Bedroom radiator is not producing heat. Other rooms appear fine.",
+      "unit_id": "unit_103a",
+      "tenant_id": "tnt_mno345",
+      "priority": "high",
+      "status": "open",
+      "category": "hvac",
+      "created_at": "2024-06-09T19:30:00Z",
+      "updated_at": "2024-06-09T19:30:00Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 2
+  }
+}
+```
+
+---
+
+## POST /maintenance
+
+Creates a new maintenance request. You can create requests on behalf of a tenant or independently for scheduled maintenance and inspections. The request is created in `open` status.
+
+### Body Parameters
+
+<ParamField body="title" type="string" required>
+  A short, descriptive title for the maintenance request (e.g. `"Burst pipe under kitchen sink"`).
+</ParamField>
+
+<ParamField body="unit_id" type="string" required>
+  The ID of the unit where the issue is located (e.g. `unit_101a`).
+</ParamField>
+
+<ParamField body="priority" type="string" required>
+  Priority level of the request. Accepted values: `low`, `medium`, `high`, `emergency`.
+</ParamField>
+
+<ParamField body="description" type="string">
+  A detailed description of the issue, including any context or steps already taken.
+</ParamField>
+
+<ParamField body="category" type="string">
+  The type of maintenance work required (e.g. `plumbing`, `hvac`, `electrical`, `appliance`, `general`).
+</ParamField>
+
+<ParamField body="tenant_id" type="string">
+  The ID of the tenant reporting the issue, if applicable.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl -X POST https://api.viithiisys.com/v1/maintenance \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "Broken window latch in living room",
+    "unit_id": "unit_102a",
+    "priority": "medium",
+    "description": "The window latch in the living room is broken and the window cannot be secured.",
+    "category": "general",
+    "tenant_id": "tnt_pqr654"
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "mnt_sss333",
+    "title": "Broken window latch in living room",
+    "description": "The window latch in the living room is broken and the window cannot be secured.",
+    "unit_id": "unit_102a",
+    "tenant_id": "tnt_pqr654",
+    "priority": "medium",
+    "status": "open",
+    "category": "general",
+    "assigned_to": null,
+    "resolution_notes": null,
+    "created_at": "2024-06-10T11:00:00Z",
+    "updated_at": "2024-06-10T11:00:00Z"
+  }
+}
+```
+
+---
+
+## GET /maintenance/{id}
+
+Returns the full details of a single maintenance request identified by its `id`.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the maintenance request (e.g. `mnt_qqq111`).
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl https://api.viithiisys.com/v1/maintenance/mnt_qqq111 \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "mnt_qqq111",
+    "title": "Burst pipe under kitchen sink",
+    "description": "Water is leaking heavily under the kitchen sink. Tenant has shut off the valve.",
+    "unit_id": "unit_101a",
+    "tenant_id": "tnt_xyz789",
+    "priority": "emergency",
+    "status": "in_progress",
+    "category": "plumbing",
+    "assigned_to": "usr_mgr001",
+    "resolution_notes": null,
+    "created_at": "2024-06-10T06:45:00Z",
+    "updated_at": "2024-06-10T07:10:00Z"
+  }
+}
+```
+
+---
+
+## PATCH /maintenance/{id}
+
+Updates a maintenance request. Use this endpoint to move a request through its lifecycle — assign it to a team member, advance its status, and add resolution notes when the work is complete.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the maintenance request to update.
+</ParamField>
+
+### Body Parameters
+
+<ParamField body="status" type="string">
+  Updated request status. Accepted values: `open`, `in_progress`, `resolved`, `closed`.
+</ParamField>
+
+<ParamField body="assigned_to" type="string">
+  The user ID of the team member assigned to handle this request (e.g. `usr_mgr001`).
+</ParamField>
+
+<ParamField body="resolution_notes" type="string">
+  Notes describing how the issue was resolved. Recommended when setting `status` to `resolved` or `closed`.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl -X PATCH https://api.viithiisys.com/v1/maintenance/mnt_qqq111 \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "status": "resolved",
+    "assigned_to": "usr_mgr001",
+    "resolution_notes": "Replaced the P-trap and supply line. No further leaks detected. Tenant confirmed issue is resolved."
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "mnt_qqq111",
+    "title": "Burst pipe under kitchen sink",
+    "description": "Water is leaking heavily under the kitchen sink. Tenant has shut off the valve.",
+    "unit_id": "unit_101a",
+    "tenant_id": "tnt_xyz789",
+    "priority": "emergency",
+    "status": "resolved",
+    "category": "plumbing",
+    "assigned_to": "usr_mgr001",
+    "resolution_notes": "Replaced the P-trap and supply line. No further leaks detected. Tenant confirmed issue is resolved.",
+    "created_at": "2024-06-10T06:45:00Z",
+    "updated_at": "2024-06-10T14:30:00Z"
+  }
+}
+```
+
+<Tip>
+  Set up Viithii webhooks to receive real-time HTTP notifications whenever a maintenance request changes status. This lets your external systems — field service apps, Slack channels, or ops dashboards — react immediately to updates without polling the API. Visit **Settings → Developer → Webhooks** in your Viithii dashboard to configure webhook endpoints.
+</Tip>

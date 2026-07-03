@@ -1,47 +1,49 @@
 ---
-title: "Quickstart"
-description: "Begin with a guide on the fastest path to a successful outcome"
+title: "Get Started with Viithii Property Management"
+sidebarTitle: "Quickstart"
+description: "Go from sign-up to collecting rent in five steps. Follow this guide to configure your Viithii workspace and add your first property."
 ---
 
-Describe how someone begins using your product. What is the first thing they need to do? Are there any prerequisites?
-
-A quickstart should take someone from zero to using your product. They'll get a quick win and a sense of what they can accomplish.
-
-## Prerequisites
-
-Before you begin, you must have:
-
-- Requirement one (for example, Node.js 18+, a free account, an API key)
-- Requirement two (for example, a compatible device, a compatible browser, a compatible operating system)
-
-## Get started
+Getting up and running with Viithii takes less than 30 minutes. This guide walks you through the five essential steps every new user should complete — creating your account, adding a property, inviting a tenant, setting up rent collection, and turning on notifications so nothing slips through the cracks.
 
 <Steps>
-  <Step title="Install">
-    Describe how to install your product or sign up.
+  <Step title="Create Your Account">
+    Sign up for a free Viithii account at [app.viithiisys.com](https://app.viithiisys.com). Enter your name, email address, and a secure password, then verify your email to activate your workspace.
 
-    ```bash
-    npm install your-package
-    ```
+    Once you're in, complete your profile by adding your phone number and business name so tenants and vendors can identify you. For a full walkthrough of every setting on the account setup screen, see [Set Up Your Viithii Account](/account-setup).
+
+    > **Example:** If you manage properties under a business entity, enter the company name (e.g., "Sunrise Rentals LLC") so it appears on leases and payment receipts.
   </Step>
-  <Step title="Configure">
-    Describe any setup or configuration needed before first use.
+  <Step title="Add Your First Property">
+    Navigate to **Properties → Add Property** in the left sidebar. Enter the property address, unit count, and type (single-family, multi-family, or commercial). Upload photos and set the monthly rent amount to prepare the listing for tenant applications.
 
-    ```bash
-    your-cli init
-    ```
+    For a step-by-step guide with screenshots, see [Add a Property](/guides/add-property).
+
+    > **Example:** A landlord with a duplex would create one property record and add two units — Unit A and Unit B — each with its own rent amount and availability date.
   </Step>
-  <Step title="Run it">
-    Show the first thing a user does to see it working.
+  <Step title="Invite Your First Tenant">
+    Open the property you just created, go to the **Tenants** tab, and click **Invite Tenant**. Enter the tenant's email address and Viithii will send them a link to complete their profile and sign their lease digitally.
 
-    ```bash
-    your-cli start
-    ```
+    Learn how to customize the onboarding experience, collect documents, and run background checks in [Onboard a Tenant](/guides/onboard-tenant).
+
+    > **Example:** Send an invite before move-in day so the tenant can upload their ID, sign the lease agreement, and set up autopay — all before handing over the keys.
+  </Step>
+  <Step title="Set Up Rent Collection">
+    Go to **Payments → Rent Collection** and connect your bank account using the secure Plaid integration. Set the monthly due date, choose whether to allow ACH, credit card, or both, and enable automatic late fee assessment after a grace period you define.
+
+    For full configuration options including partial payments and prorated rent, see [Collect Rent](/guides/collect-rent).
+
+    > **Example:** Set a due date of the 1st with a 5-day grace period and a $50 flat late fee — Viithii will apply the fee automatically on the 6th if payment hasn't been received.
+  </Step>
+  <Step title="Enable Notifications">
+    Head to **Settings → Notifications** to configure which events trigger email or SMS alerts. At minimum, enable notifications for new rent payments, overdue balances, and incoming maintenance requests so you stay informed in real time.
+
+    To set up notification rules for multiple team members or integrate with Slack, see [Configure Notifications](/configuration/notifications).
+
+    > **Example:** Enable SMS alerts for maintenance requests so you get an instant text message the moment a tenant reports a leaking pipe — no need to log in to check.
   </Step>
 </Steps>
 
 <Tip>
-  Give people a way to get help. This could be a link to a support page, a chat with a customer support agent, or a forum for your product.
-
-  Example: Need help? Reach out to us at [support@yourcompany.com](mailto:support@yourcompany.com).
+  After completing these five steps, your Viithii **Dashboard** becomes your daily command center. It surfaces outstanding rent balances, open maintenance tickets, upcoming lease expirations, and a month-to-date income summary — all on a single screen. Bookmark it for a quick morning check-in.
 </Tip>

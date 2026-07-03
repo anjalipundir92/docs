@@ -1,0 +1,105 @@
+---
+title: "Payments and Rent Collection in Viithii"
+sidebarTitle: "Payments"
+description: "Understand how Viithii tracks rent, deposits, and fees — including payment methods, statuses, late fee automation, and ACH processing details."
+---
+
+Viithii gives you a unified ledger for every dollar that flows through your rental portfolio. From the moment a lease goes active, the platform automatically generates rent charges on the due date you configure, records every payment your tenants submit, applies late fees when the grace period lapses, and surfaces a real-time balance for each unit. Whether your tenants pay online or hand you a check, Viithii keeps the books accurate and audit-ready.
+
+## Payment Types
+
+Viithii categorizes every charge and payment under one of five types to keep your ledger organized and your reports meaningful:
+
+<CardGroup cols={2}>
+  <Card title="Rent" icon="house-chimney">
+    The recurring monthly charge generated automatically on the rent due day for each active lease. Rent charges are the backbone of your payment ledger.
+  </Card>
+  <Card title="Security Deposit" icon="shield-halved">
+    A one-time charge collected at lease inception. Viithii tracks the deposit balance separately so you can calculate deductions and issue refunds accurately at move-out.
+  </Card>
+  <Card title="Late Fee" icon="clock">
+    Automatically assessed when a tenant misses their payment due date and the configured grace period expires. Late fees appear as separate line items on the tenant's ledger.
+  </Card>
+  <Card title="Utility" icon="bolt">
+    Charges for water, electricity, gas, or other utilities you bill back to tenants. Utility charges can be added manually or imported from a utility billing integration.
+  </Card>
+  <Card title="Other" icon="ellipsis">
+    A catch-all type for one-off charges — pet fees, parking fees, lease modification fees, or any custom charge that doesn't fit the above categories.
+  </Card>
+</CardGroup>
+
+## Payment Methods
+
+Viithii supports three payment methods to accommodate the full range of tenant preferences:
+
+<Accordion title="ACH / Bank Transfer">
+  Tenants link their checking or savings account directly in the Tenant Portal. Viithii initiates an ACH debit on the payment date and deposits funds into your connected bank account within 2–5 business days. ACH is the most cost-effective method and the one Viithii recommends for recurring rent collection.
+</Accordion>
+
+<Accordion title="Credit / Debit Card">
+  Tenants can pay with any major credit or debit card through the Tenant Portal. Card payments settle faster than ACH (typically 1–2 business days) but carry a processing fee that you configure to be absorbed by the platform or passed through to the tenant.
+</Accordion>
+
+<Accordion title="Manual Payment (Check / Cash)">
+  When a tenant pays by check or cash in person, you record the payment manually in Viithii. Select the charge, enter the amount and payment date, choose **Check** or **Cash** as the method, and optionally add a reference number (check number, receipt ID). The payment is marked **Paid** immediately upon saving, with no processing delay.
+</Accordion>
+
+## Payment Statuses
+
+Every payment record in Viithii carries one of five statuses that tells you exactly where the money is in its lifecycle:
+
+<ResponseField name="Pending" type="status">
+  The charge has been created but no payment attempt has been made yet. A rent charge starts as Pending on the due date and remains so until the tenant submits payment or you record one manually.
+</ResponseField>
+
+<ResponseField name="Processing" type="status">
+  An ACH or card payment has been initiated and is in transit through the payment network. Funds have not yet settled into your account. Do not record a duplicate manual payment while a charge is in Processing.
+</ResponseField>
+
+<ResponseField name="Paid" type="status">
+  The payment has fully settled. For ACH and card payments, this status appears once funds are deposited in your account. For manual payments, it is set immediately when you save the record.
+</ResponseField>
+
+<ResponseField name="Failed" type="status">
+  The payment attempt was unsuccessful — most commonly due to insufficient funds (ACH) or a declined card. Viithii notifies both you and the tenant by email when a payment fails, and the charge reverts to Pending so a new attempt can be made.
+</ResponseField>
+
+<ResponseField name="Refunded" type="status">
+  A previously Paid amount has been reversed — for example, a security deposit refund at move-out or an overcharge correction. Viithii records the refund as a separate transaction linked to the original payment for a clean audit trail.
+</ResponseField>
+
+## Late Fees
+
+Viithii automates late fee assessment so you never have to remember to charge a tenant manually. You configure the late fee policy on each lease using two parameters:
+
+<ParamField path="grace_period_days" type="integer" required>
+  The number of calendar days after the rent due date during which a tenant can pay without penalty. For example, a value of `5` means a tenant whose rent is due on the 1st has until the 6th to pay before a late fee is assessed.
+</ParamField>
+
+<ParamField path="late_fee_type" type="enum" required>
+  Choose between `flat` (a fixed dollar amount, e.g., `$50`) or `percentage` (a percentage of the monthly rent, e.g., `5%`). Viithii calculates and posts the correct amount automatically when the grace period expires.
+</ParamField>
+
+Once the grace period expires without a full payment, Viithii:
+
+1. Calculates the late fee based on the policy you configured.
+2. Creates a new **Late Fee** charge on the tenant's ledger.
+3. Notifies the tenant by email that a late fee has been added to their balance.
+4. Reflects the updated total balance on your landlord dashboard.
+
+<Tip>
+  Encourage your tenants to enable **autopay** in the Tenant Portal. When autopay is on, Viithii automatically initiates an ACH debit on the due date each month, eliminating late payments at the source. You can also enable autopay on a tenant's behalf from the lease payment settings page.
+</Tip>
+
+<Warning>
+  Failed ACH payments are subject to banking network retry rules. Viithii does **not** automatically retry a failed ACH debit — the tenant must return to the Tenant Portal and submit a new payment. If the same bank account fails twice in a 60-day period, Viithii temporarily restricts that account from ACH payments and prompts the tenant to use a card or contact you for manual payment arrangements. Check your dashboard's **Failed Payments** queue daily to catch and resolve these situations quickly.
+</Warning>
+
+<CardGroup cols={2}>
+  <Card title="Collect Rent Guide" icon="money-bill-wave" href="/guides/collect-rent">
+    Set up rent charges, configure autopay, record manual payments, and reconcile your ledger with step-by-step instructions.
+  </Card>
+  <Card title="Onboard a Tenant" icon="user-plus" href="/guides/onboard-tenant">
+    Make sure your tenants are set up in the portal before their first rent charge is due.
+  </Card>
+</CardGroup>

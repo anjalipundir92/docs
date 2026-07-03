@@ -1,0 +1,68 @@
+---
+title: "Connect Third-Party Integrations in Viithii"
+sidebarTitle: "Integrations"
+description: "Link Viithii to your bank, accounting software, payment processors, e-signature tools, and listing platforms to streamline your workflow."
+---
+
+Viithii connects with the tools you already use so you can manage your entire property business from one place. Integrations are optional, but each one reduces manual data entry, automates critical workflows, and keeps your records consistent across platforms. You can connect, manage, and disconnect integrations at any time from your account settings.
+
+## Available Integrations
+
+<CardGroup cols={2}>
+  <Card title="Plaid" icon="bank">
+    Securely link tenant and landlord bank accounts for ACH payments without manually entering routing and account numbers. Plaid verifies accounts instantly using bank-level encryption.
+  </Card>
+  <Card title="QuickBooks" icon="calculator">
+    Automatically sync rental income, maintenance expenses, and security deposit transactions to your QuickBooks account. Eliminate manual bookkeeping and keep your financials audit-ready.
+  </Card>
+  <Card title="Stripe" icon="credit-card">
+    Accept credit card and debit card payments from tenants through Stripe's secure payment infrastructure. Tenants can pay directly from the tenant portal using any major card.
+  </Card>
+  <Card title="DocuSign" icon="file-signature">
+    Use DocuSign's advanced e-signature workflows for complex lease agreements that require multi-party signing, signer authentication, or detailed audit trails beyond Viithii's built-in e-signature.
+  </Card>
+  <Card title="Zillow Rental Manager" icon="home">
+    Publish vacant unit listings directly from Viithii to Zillow Rental Manager. Sync unit details, photos, and availability without leaving your dashboard.
+  </Card>
+  <Card title="Google Calendar" icon="calendar">
+    Sync lease start and end dates, rent due dates, and scheduled maintenance appointments to Google Calendar so your property schedule lives alongside the rest of your commitments.
+  </Card>
+</CardGroup>
+
+## Connecting an Integration
+
+All integrations follow the same general connection flow. Most use OAuth (where you authorize via your existing account) while others require an API key from the third-party platform.
+
+<Steps>
+  <Step title="Open Integrations Settings">
+    Go to **Settings** in the left sidebar and select **Integrations**. You'll see a list of all available integrations and their current connection status.
+  </Step>
+  <Step title="Click Connect">
+    Find the integration you want to enable and click the **Connect** button next to it.
+  </Step>
+  <Step title="Complete Authorization">
+    Follow the on-screen prompts specific to that integration:
+    - For **OAuth-based integrations** (Plaid, QuickBooks, DocuSign, Google Calendar, Zillow), you'll be redirected to the third-party login page to authorize Viithii's access.
+    - For **API key integrations** (Stripe), paste your API key from your Stripe dashboard into the provided field.
+  </Step>
+  <Step title="Configure Sync Settings">
+    After authorization, some integrations display additional options — such as which QuickBooks accounts to map income to, or which Google Calendar to sync to. Review and adjust these settings as needed.
+  </Step>
+  <Step title="Confirm the Connection">
+    Click **Confirm** or **Finish Setup**. The integration status changes to **Connected** and the sync begins automatically.
+  </Step>
+</Steps>
+
+## Managing Connected Integrations
+
+Once connected, each integration displays a **Connected** badge and a **Manage** button on the **Integrations** page. Use **Manage** to update sync settings, re-authorize if your credentials change, or view the last successful sync timestamp.
+
+To disconnect an integration, click **Manage** → **Disconnect**. Viithii immediately stops syncing data with that service.
+
+<Note>
+  When you connect a third-party integration, you authorize that service to exchange data with Viithii under their respective privacy policies. Viithii never stores your full bank credentials — Plaid uses tokenized access that you can revoke at any time directly from your bank's app. Review each integration's privacy policy for details on how they handle your data.
+</Note>
+
+<Warning>
+  Disconnecting **QuickBooks** stops future syncing but does **not** delete any data that has already been exported to QuickBooks. Transactions previously synced will remain in QuickBooks exactly as they were exported. If you reconnect QuickBooks later, Viithii will not re-sync historical records — only new transactions from the reconnection date onward will sync.
+</Warning>

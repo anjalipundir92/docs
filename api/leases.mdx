@@ -1,0 +1,318 @@
+---
+title: "Leases API — Manage Rental Agreements"
+sidebarTitle: "Leases"
+description: "Use the Leases API to create rental agreements, set rent and deposit terms, send e-signatures, and track lease status."
+---
+
+The Leases API lets you create and manage the rental agreements that connect tenants to units. A lease defines the financial terms of a tenancy — monthly rent, security deposit, late fees — as well as its duration and type. Once a lease is created in draft, you can send it for e-signature directly through the API. After both parties sign, the lease transitions to `active` and drives payment scheduling in your account.
+
+---
+
+## GET /leases
+
+Returns a paginated list of leases across your account. Filter by status, tenant, or property to retrieve targeted subsets of your portfolio.
+
+### Query Parameters
+
+<ParamField query="status" type="string">
+  Filter by lease status. Accepted values: `draft`, `active`, `expiring`, `expired`, `terminated`.
+</ParamField>
+
+<ParamField query="tenant_id" type="string">
+  Return leases for a specific tenant (e.g. `tnt_xyz789`).
+</ParamField>
+
+<ParamField query="property_id" type="string">
+  Return leases for all units within a specific property (e.g. `prop_abc123`).
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  The page number to retrieve.
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="20">
+  Number of results per page. Maximum value is `100`.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl "https://api.viithiisys.com/v1/leases?status=active&property_id=prop_abc123" \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": [
+    {
+      "id": "lse_rst101",
+      "tenant_id": "tnt_xyz789",
+      "unit_id": "unit_101a",
+      "type": "fixed",
+      "start_date": "2023-09-01",
+      "end_date": "2024-08-31",
+      "monthly_rent": 1450.00,
+      "security_deposit": 1450.00,
+      "status": "active"
+    },
+    {
+      "id": "lse_uvw202",
+      "tenant_id": "tnt_mno345",
+      "unit_id": "unit_103a",
+      "type": "month_to_month",
+      "start_date": "2024-01-15",
+      "end_date": null,
+      "monthly_rent": 1300.00,
+      "security_deposit": 1300.00,
+      "status": "active"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 2
+  }
+}
+```
+
+---
+
+## POST /leases
+
+Creates a new lease in `draft` status. A draft lease can be edited freely before you send it for signature. The lease does not become binding or drive any payment scheduling until it reaches `active` status.
+
+### Body Parameters
+
+<ParamField body="tenant_id" type="string" required>
+  The ID of the tenant who is party to this lease (e.g. `tnt_xyz789`).
+</ParamField>
+
+<ParamField body="unit_id" type="string" required>
+  The ID of the unit being leased (e.g. `unit_102a`).
+</ParamField>
+
+<ParamField body="type" type="string" required>
+  Lease type. Accepted values: `fixed`, `month_to_month`.
+</ParamField>
+
+<ParamField body="start_date" type="string" required>
+  Lease start date in `YYYY-MM-DD` format.
+</ParamField>
+
+<ParamField body="monthly_rent" type="number" required>
+  Monthly rent amount in US dollars (e.g. `1450.00`).
+</ParamField>
+
+<ParamField body="security_deposit" type="number" required>
+  Security deposit amount in US dollars.
+</ParamField>
+
+<ParamField body="end_date" type="string">
+  Lease end date in `YYYY-MM-DD` format. Required when `type` is `fixed`; omit for `month_to_month` leases.
+</ParamField>
+
+<ParamField body="rent_due_day" type="integer" default="1">
+  Day of the month on which rent is due (1–28).
+</ParamField>
+
+<ParamField body="late_fee_amount" type="number">
+  Flat late fee in US dollars charged after the grace period expires.
+</ParamField>
+
+<ParamField body="late_fee_grace_days" type="integer">
+  Number of days after `rent_due_day` before a late fee is applied.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl -X POST https://api.viithiisys.com/v1/leases \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tenant_id": "tnt_pqr654",
+    "unit_id": "unit_102a",
+    "type": "fixed",
+    "start_date": "2024-07-01",
+    "end_date": "2025-06-30",
+    "monthly_rent": 1100.00,
+    "security_deposit": 1100.00,
+    "rent_due_day": 1,
+    "late_fee_amount": 75.00,
+    "late_fee_grace_days": 5
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "lse_xyz303",
+    "tenant_id": "tnt_pqr654",
+    "unit_id": "unit_102a",
+    "type": "fixed",
+    "start_date": "2024-07-01",
+    "end_date": "2025-06-30",
+    "monthly_rent": 1100.00,
+    "security_deposit": 1100.00,
+    "rent_due_day": 1,
+    "late_fee_amount": 75.00,
+    "late_fee_grace_days": 5,
+    "status": "draft",
+    "created_at": "2024-06-05T12:00:00Z"
+  }
+}
+```
+
+---
+
+## GET /leases/{id}
+
+Returns the full details of a single lease identified by its `id`.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the lease (e.g. `lse_rst101`).
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl https://api.viithiisys.com/v1/leases/lse_rst101 \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "lse_rst101",
+    "tenant_id": "tnt_xyz789",
+    "unit_id": "unit_101a",
+    "type": "fixed",
+    "start_date": "2023-09-01",
+    "end_date": "2024-08-31",
+    "monthly_rent": 1450.00,
+    "security_deposit": 1450.00,
+    "rent_due_day": 1,
+    "late_fee_amount": 100.00,
+    "late_fee_grace_days": 3,
+    "status": "active",
+    "signed_at": "2023-08-28T14:22:00Z",
+    "created_at": "2023-08-20T09:00:00Z"
+  }
+}
+```
+
+---
+
+## POST /leases/{id}/send-for-signature
+
+Triggers the e-signature workflow for a draft lease. Viithii sends an email to all signatories (the tenant and any additional signers you have configured) with a link to review and sign the document electronically. The response includes a `signing_url` you can share directly if needed.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the lease to send for signature. Must be in `draft` status.
+</ParamField>
+
+No request body is required for this endpoint.
+
+### Example Request
+
+```bash curl
+curl -X POST https://api.viithiisys.com/v1/leases/lse_xyz303/send-for-signature \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "signing_url": "https://sign.viithiisys.com/s/lse_xyz303/tok_abc999",
+    "sent_at": "2024-06-05T12:30:00Z"
+  }
+}
+```
+
+---
+
+## PATCH /leases/{id}
+
+Updates fields on a draft lease. You can change any term — rent amount, dates, late fees — before the lease is sent for signature and executed.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the lease to update. Must be in `draft` status.
+</ParamField>
+
+### Body Parameters
+
+<ParamField body="monthly_rent" type="number">
+  Updated monthly rent amount.
+</ParamField>
+
+<ParamField body="security_deposit" type="number">
+  Updated security deposit amount.
+</ParamField>
+
+<ParamField body="start_date" type="string">
+  Updated start date in `YYYY-MM-DD` format.
+</ParamField>
+
+<ParamField body="end_date" type="string">
+  Updated end date in `YYYY-MM-DD` format.
+</ParamField>
+
+<ParamField body="late_fee_amount" type="number">
+  Updated flat late fee amount.
+</ParamField>
+
+<ParamField body="late_fee_grace_days" type="integer">
+  Updated grace period in days before a late fee is charged.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl -X PATCH https://api.viithiisys.com/v1/leases/lse_xyz303 \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "monthly_rent": 1150.00,
+    "late_fee_grace_days": 7
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "lse_xyz303",
+    "tenant_id": "tnt_pqr654",
+    "unit_id": "unit_102a",
+    "type": "fixed",
+    "start_date": "2024-07-01",
+    "end_date": "2025-06-30",
+    "monthly_rent": 1150.00,
+    "security_deposit": 1100.00,
+    "rent_due_day": 1,
+    "late_fee_amount": 75.00,
+    "late_fee_grace_days": 7,
+    "status": "draft",
+    "created_at": "2024-06-05T12:00:00Z"
+  }
+}
+```
+
+<Warning>
+  You cannot modify a lease that is in `active`, `expiring`, or `expired` status. To adjust terms for an active tenancy, create a new lease and associate it with the same tenant and unit. To end an active lease early, update its `status` to `terminated` — contact Viithii support if you need assistance with the termination workflow.
+</Warning>

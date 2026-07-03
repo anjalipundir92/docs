@@ -1,0 +1,106 @@
+---
+title: "Collect Rent Online with Viithii Payments"
+sidebarTitle: "Collect Rent"
+description: "Set up online rent collection in Viithii, let tenants pay via bank transfer or card, record manual payments, and track your full payment history."
+---
+
+Viithii Payments gives you a centralized way to collect rent, enforce late fees, and reconcile income across your entire portfolio. Tenants pay through the Tenant Portal using a bank transfer or card, and every transaction is logged automatically against the correct lease and unit. This guide covers how to configure your payment settings, handle manual payments, and review your transaction history.
+
+## Setting Up Rent Collection
+
+Before tenants can pay online, you need to connect a bank account and configure your payment rules.
+
+<Steps>
+  <Step title="Open Payment Settings">
+    Click **Settings** in the left sidebar, then select **Payments** from the settings menu.
+  </Step>
+  <Step title="Connect your bank account">
+    Click **Connect Bank Account**. Viithii uses **Plaid** to securely link your account via ACH — you'll be guided through a short bank login flow. Your full account number is never stored on Viithii's servers.
+  </Step>
+  <Step title="Set your rent due date and grace period">
+    Choose the **Rent Due Day** (e.g., the 1st of each month) and the **Grace Period** — the number of days after the due date before a payment is considered late. Common grace periods are 3 or 5 days.
+  </Step>
+  <Step title="Enable late fee rules (optional)">
+    Toggle on **Late Fees** and configure the fee structure:
+    - **Flat fee** — a fixed dollar amount charged once after the grace period
+    - **Percentage fee** — a percentage of the monthly rent
+    - **Daily fee** — an additional amount charged for each day the rent remains unpaid
+
+    Late fees are applied automatically and appear as a separate line item on the tenant's account.
+  </Step>
+  <Step title="Save your settings">
+    Click **Save Settings**. Your payment configuration applies to all new leases created going forward. To apply changes to existing leases, open each lease and click **Update Payment Terms**.
+  </Step>
+</Steps>
+
+<Warning>
+  ACH bank transfers take **2–3 business days** to process and settle in your connected account. Payments initiated on Fridays or before bank holidays may take longer. Plan your due dates and grace periods accordingly, and avoid relying on same-day availability of ACH funds.
+</Warning>
+
+## How Tenants Pay
+
+Tenants log in to the **Viithii Tenant Portal** and navigate to the **Payments** tab to make a rent payment. They can pay using:
+
+<Tabs>
+  <Tab title="Bank Transfer (ACH)">
+    Tenants link their personal bank account via Plaid and initiate a direct ACH transfer. This method has no transaction fee and is ideal for recurring monthly payments. Tenants can enable **Autopay** to have their rent pulled automatically on the due date each month.
+  </Tab>
+  <Tab title="Debit or Credit Card">
+    Tenants can pay with a Visa, Mastercard, or Discover card. A processing fee applies (displayed to the tenant at checkout before they confirm). Card payments are credited faster than ACH — typically within 1 business day.
+  </Tab>
+</Tabs>
+
+Once a payment is submitted, the tenant receives an on-screen confirmation and an email receipt. The payment status in Viithii updates from **Pending** to **Completed** once funds are settled.
+
+<Tip>
+  Enable **Email Receipts** under **Settings** → **Payments** → **Notifications** to automatically send tenants a receipt every time a payment is processed. This reduces "did my payment go through?" inquiries and gives tenants a paper trail for their own records.
+</Tip>
+
+## Recording Manual Payments
+
+If a tenant pays by check or cash, you can log the payment manually so your records stay accurate and the tenant's balance reflects correctly.
+
+<Steps>
+  <Step title="Open the tenant record">
+    Go to **Tenants**, search for the tenant by name or unit, and click their name to open their record.
+  </Step>
+  <Step title="Navigate to Payments">
+    Click the **Payments** tab on the tenant detail page.
+  </Step>
+  <Step title="Add a manual payment">
+    Click **Record Payment**. Enter the following details:
+    - **Amount**
+    - **Payment Date** — the date you received the payment
+    - **Payment Method** — select **Check** or **Cash**
+    - **Reference Number** (optional) — useful for check numbers
+    - **Notes** (optional)
+  </Step>
+  <Step title="Save the record">
+    Click **Save Payment**. The payment is immediately logged against the tenant's ledger and their outstanding balance updates accordingly.
+  </Step>
+</Steps>
+
+## Viewing Payment History
+
+You can review payment activity at two levels: per tenant or across an entire property.
+
+<CardGroup cols={2}>
+  <Card title="By Tenant" icon="user">
+    Open a tenant record and click the **Payments** tab to see every payment, pending charge, and late fee for that tenant in chronological order.
+  </Card>
+  <Card title="By Property" icon="building">
+    Open a property, click the **Financials** tab, and use the date filters to view all payments collected across every unit for any time range.
+  </Card>
+</CardGroup>
+
+To export payment data for accounting or tax purposes, click **Export to CSV** on either view. You can also connect Viithii to QuickBooks or Xero under **Settings** → **Integrations** to sync transactions automatically.
+
+<Accordion title="What happens if a payment fails?">
+  If an ACH payment fails — due to insufficient funds, a closed account, or a bank-side rejection — Viithii automatically:
+
+  1. **Notifies you** via email and an in-app alert within 24 hours of the failed transaction.
+  2. **Notifies the tenant** with an email explaining the failure and prompting them to retry or update their payment method in the portal.
+  3. **Retries the payment once** after 3 business days, if the failure was due to insufficient funds. If the retry also fails, the payment is marked as **Failed** and no further automatic attempts are made.
+
+  The tenant's balance remains outstanding and any applicable late fees continue to accrue based on your grace period settings. You can manually waive a late fee by opening the tenant's **Payments** tab, clicking the fee line item, and selecting **Waive Fee**.
+</Accordion>

@@ -1,0 +1,92 @@
+---
+title: "Configure Notifications and Reminders"
+sidebarTitle: "Notifications"
+description: "Set up email, in-app, and SMS notifications for rent, payments, lease events, and maintenance updates to stay informed automatically."
+---
+
+Viithii keeps you and your tenants informed at every step of the property management lifecycle through a flexible notification system. You can control exactly which events trigger alerts, choose your preferred delivery channels, and set timing rules — so critical updates reach the right people without overwhelming anyone's inbox.
+
+## Notification Types
+
+Viithii supports two primary notification channels: **Email** and **In-App**. Each channel can be enabled or disabled independently per event type.
+
+| Event | Description |
+|---|---|
+| **Rent Due** | Sent ahead of the due date to remind you (and optionally the tenant) that rent is approaching |
+| **Payment Received** | Confirms a successful payment has been processed |
+| **Payment Failed** | Alerts you immediately when a payment attempt is declined or returned |
+| **Lease Expiring** | Reminds you when a lease is approaching its end date so you can take action |
+| **Maintenance Status Update** | Notifies you and the tenant when a maintenance request changes status |
+| **New Maintenance Request** | Alerts you when a tenant submits a new maintenance request |
+
+All notification types support both email and in-app delivery. In-app notifications appear in the **Notifications** bell icon in the top navigation bar of your Viithii dashboard.
+
+## Managing Your Notifications
+
+You can configure notification preferences at any time from your account settings. Changes apply immediately after saving.
+
+<Steps>
+  <Step title="Open Notification Settings">
+    Navigate to **Settings** in the left sidebar, then select **Notifications**.
+  </Step>
+  <Step title="Toggle Each Notification Type">
+    Locate the notification event you want to configure. Use the toggle switch to enable or disable email and in-app delivery independently for each event.
+  </Step>
+  <Step title="Set Timing for Upcoming Events">
+    For time-sensitive notifications such as **Rent Due** and **Lease Expiring**, click the timing dropdown and choose how far in advance you want to be notified — for example, **3 days before rent due** or **60 days before lease expiry**.
+  </Step>
+  <Step title="Save Your Preferences">
+    Click **Save** at the bottom of the page. Your new preferences take effect for all future events.
+  </Step>
+</Steps>
+
+## Tenant Notifications
+
+Viithii automatically sends a set of notifications to tenants on your behalf based on activity in your account. You do not need to configure these separately — they are enabled by default when a tenant is added to the platform.
+
+<CardGroup cols={2}>
+  <Card title="Rent Reminders" icon="bell">
+    Tenants receive an automated reminder email before their rent due date. The timing mirrors whatever you've configured for your own rent-due notification.
+  </Card>
+  <Card title="Payment Receipts" icon="receipt">
+    After every successful payment, tenants automatically receive a detailed payment receipt by email.
+  </Card>
+  <Card title="Maintenance Updates" icon="wrench">
+    When you update the status of a maintenance request — such as marking it **In Progress** or **Resolved** — the tenant is notified by email.
+  </Card>
+  <Card title="Lease Documents" icon="file-contract">
+    Tenants receive email notifications when a lease is sent for signature, and again when all parties have signed.
+  </Card>
+</CardGroup>
+
+To disable any tenant-facing notification, return to **Settings** → **Notifications** and toggle off the relevant event under the **Tenant Notifications** section.
+
+## SMS Notifications
+
+SMS alerts are an optional add-on for landlords who want instant mobile notifications for critical events. When enabled, Viithii sends text messages for high-priority events such as **Payment Failed** and **New Maintenance Request**.
+
+<Steps>
+  <Step title="Navigate to SMS Settings">
+    Go to **Settings** → **Notifications** → **SMS Alerts**.
+  </Step>
+  <Step title="Enter Your Phone Number">
+    Type your mobile phone number in the **Phone Number** field and click **Send Verification Code**.
+  </Step>
+  <Step title="Verify Your Number">
+    Enter the 6-digit code sent to your phone, then click **Verify**.
+  </Step>
+  <Step title="Select SMS Events">
+    Choose which critical events should trigger an SMS alert. Toggle each event on or off according to your preference.
+  </Step>
+  <Step title="Save">
+    Click **Save SMS Settings** to activate SMS notifications.
+  </Step>
+</Steps>
+
+<Note>
+  SMS notifications are available on the **Growth** and **Enterprise** plans. Standard carrier messaging rates may apply to the recipient.
+</Note>
+
+<Tip>
+  Customize the sender name that appears on outgoing notification emails to match your business. Go to **Settings** → **Account** → **Email Branding** and enter your preferred **Sender Name** — for example, "Greenfield Properties" instead of the default "Viithii." This gives your communications a more professional, branded appearance to tenants.
+</Tip>

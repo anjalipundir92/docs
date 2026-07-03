@@ -1,0 +1,83 @@
+---
+title: "Manage Team Members and Role-Based Access"
+sidebarTitle: "Team Access"
+description: "Invite team members, assign roles with the right permission levels, and control which properties each person can access in Viithii."
+---
+
+Viithii's role-based access control lets you build a team without exposing sensitive account information to everyone who needs system access. Whether you're onboarding a property manager, a maintenance coordinator, or a co-owner, you can assign a role that gives them exactly the access they need — nothing more. All team management happens from a single location in your account settings.
+
+## Roles
+
+Viithii includes three built-in roles. Every team member you invite must be assigned one of these roles, and you can change a member's role at any time.
+
+<CardGroup cols={1}>
+  <Card title="Owner" icon="crown">
+    Full, unrestricted access to every feature in Viithii — including all properties, tenant records, leases, maintenance, financials, integrations, and account billing. The **Owner** role is the only role that can delete the account, manage subscription and billing details, and transfer ownership to another user. Only one Owner exists per account.
+  </Card>
+  <Card title="Manager" icon="user-tie">
+    Broad operational access to manage properties, tenants, leases, and maintenance requests. Managers can invite tenants, collect rent, create and send leases, and update maintenance statuses. They **cannot** access billing, view payout details, or delete the account.
+  </Card>
+  <Card title="Maintenance Coordinator" icon="wrench">
+    Scoped access limited to the maintenance module. Maintenance Coordinators can view all open maintenance requests, update request statuses, add notes, and upload photos. They cannot access tenant financials, lease documents, or account settings.
+  </Card>
+</CardGroup>
+
+## Inviting a Team Member
+
+You can invite as many team members as your plan allows. Each invited member receives an email prompting them to create their Viithii account (or sign in if they already have one).
+
+<Steps>
+  <Step title="Open Team Settings">
+    Navigate to **Settings** in the left sidebar, then click **Team**.
+  </Step>
+  <Step title="Start the Invitation">
+    Click **Invite Member** in the top-right corner of the team management page.
+  </Step>
+  <Step title="Enter the Member's Email">
+    Type the email address of the person you want to invite. Make sure you use the email address they want associated with their Viithii account.
+  </Step>
+  <Step title="Select a Role">
+    Use the **Role** dropdown to assign **Owner**, **Manager**, or **Maintenance Coordinator**. Review the role permissions carefully before selecting.
+  </Step>
+  <Step title="Send the Invite">
+    Click **Send Invite**. Viithii sends an invitation email to the address you entered. The invitation is valid for **7 days**.
+  </Step>
+  <Step title="Member Joins the Account">
+    The invitee clicks the link in their email, completes account setup (or logs in), and is added to your team automatically. You'll see their status change from **Pending** to **Active** on the **Team** page.
+  </Step>
+</Steps>
+
+## Removing a Team Member
+
+If a team member no longer needs access — for example, a contractor whose work is complete — you can remove them immediately.
+
+Navigate to **Settings** → **Team**, find the member in the list, click the **⋯** menu next to their name, and select **Remove Member**. Confirm the action in the dialog that appears.
+
+<Warning>
+  Removing a team member revokes their access to your Viithii account **immediately** — they are logged out of any active sessions and cannot sign back in. Any data they created (maintenance notes, lease drafts, tenant records) remains intact in your account. This action cannot be undone; if you need to restore access, you must send a new invitation.
+</Warning>
+
+## Property-Level Access
+
+By default, a **Manager** has access to all properties in your account. If you want to restrict a Manager to specific properties only — for example, assigning one manager per building — you can configure property-level access after inviting them.
+
+<Steps>
+  <Step title="Open the Member's Profile">
+    Go to **Settings** → **Team** and click on the Manager's name to open their profile.
+  </Step>
+  <Step title="Select Property Access">
+    Under the **Property Access** section, switch the toggle from **All Properties** to **Specific Properties**.
+  </Step>
+  <Step title="Choose Properties">
+    Check the box next to each property this Manager should have access to. Unselected properties will be invisible to them in the dashboard.
+  </Step>
+  <Step title="Save Changes">
+    Click **Save**. The restriction takes effect immediately.
+  </Step>
+</Steps>
+
+Property-level access applies to the **Manager** role only. **Maintenance Coordinators** always see requests across all properties by default; contact support if you need scoped maintenance access.
+
+<Tip>
+  The **Maintenance Coordinator** role is ideal for third-party vendors and contractors who need to see and update work orders without gaining access to tenant financial data or lease documents. Create a Maintenance Coordinator account for each vendor to maintain a clear audit trail of who updated which requests and when.
+</Tip>

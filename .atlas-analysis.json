@@ -1,13 +1,11 @@
 {
-  "$schema": "https://mintlify.com/docs.json",
-  "name": "Viithii Property Management",
+  "projectType": "saas",
+  "projectName": "Viithii Property Management",
+  "projectDescription": "A cloud-based property management platform that helps landlords and property managers streamline leasing, tenant management, maintenance, and rent collection.",
   "theme": "almond",
-  "colors": {
-    "primary": "#ef7025",
-    "light": "#eec9bc",
-    "dark": "#4fa1ab"
-  },
-  "favicon": "/favicon.svg",
+  "primaryColor": "#ef7025",
+  "lightColor": "#eec9bc",
+  "darkColor": "#4fa1ab",
   "navigation": {
     "tabs": [
       {
@@ -82,14 +80,30 @@
       }
     ]
   },
-  "navbar": {
-    "primary": {
-      "type": "button",
-      "label": "Sign In",
-      "href": "https://app.viithiisys.com"
-    }
-  },
-  "footer": {
-    "socials": {}
-  }
+  "keyFeatures": [
+    "Property listing and unit management",
+    "Tenant onboarding and portal access",
+    "Digital lease creation and e-signatures",
+    "Online rent collection and payment tracking",
+    "Maintenance request management",
+    "Financial reporting and expense tracking",
+    "Multi-property portfolio overview",
+    "Team and role-based access control",
+    "Automated rent reminders and notifications",
+    "Document storage and management"
+  ],
+  "publicApiSurface": [
+    "GET /properties — list all properties",
+    "POST /properties — create a property",
+    "GET /properties/{id}/units — list units for a property",
+    "GET /tenants — list tenants",
+    "POST /tenants — create a tenant",
+    "GET /leases — list leases",
+    "POST /leases — create a lease",
+    "GET /payments — list payments",
+    "POST /payments — record a payment",
+    "GET /maintenance — list maintenance requests",
+    "POST /maintenance — create a maintenance request",
+    "PATCH /maintenance/{id} — update maintenance request status"
+  ]
 }

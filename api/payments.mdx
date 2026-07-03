@@ -1,0 +1,206 @@
+---
+title: "Payments API — Track Rent and Transactions"
+sidebarTitle: "Payments"
+description: "Use the Payments API to retrieve payment records, filter by date range or status, and manually record cash or check payments."
+---
+
+The Payments API gives you a complete view of every financial transaction in your account — rent payments, security deposits, late fees, and any other charges. Tenants initiate ACH and card payments from the Viithii tenant portal, which creates payment records automatically. Use this API to read those records, filter by date range to generate rent rolls, and manually record cash or check payments that happen outside the portal.
+
+---
+
+## GET /payments
+
+Returns a paginated list of payment records. Apply filters to narrow results by tenant, lease, status, or date range for reporting and reconciliation.
+
+### Query Parameters
+
+<ParamField query="tenant_id" type="string">
+  Return payments for a specific tenant (e.g. `tnt_xyz789`).
+</ParamField>
+
+<ParamField query="lease_id" type="string">
+  Return payments associated with a specific lease (e.g. `lse_rst101`).
+</ParamField>
+
+<ParamField query="status" type="string">
+  Filter by payment status. Accepted values: `pending`, `processing`, `paid`, `failed`, `refunded`.
+</ParamField>
+
+<ParamField query="from_date" type="string">
+  Return payments with a `due_date` on or after this date. Format: `YYYY-MM-DD`.
+</ParamField>
+
+<ParamField query="to_date" type="string">
+  Return payments with a `due_date` on or before this date. Format: `YYYY-MM-DD`.
+</ParamField>
+
+<ParamField query="page" type="integer" default="1">
+  The page number to retrieve.
+</ParamField>
+
+<ParamField query="per_page" type="integer" default="20">
+  Number of results per page. Maximum value is `100`.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl "https://api.viithiisys.com/v1/payments?status=paid&from_date=2024-06-01&to_date=2024-06-30" \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": [
+    {
+      "id": "pay_aaa111",
+      "tenant_id": "tnt_xyz789",
+      "lease_id": "lse_rst101",
+      "amount": 1450.00,
+      "type": "rent",
+      "method": "ach",
+      "status": "paid",
+      "due_date": "2024-06-01",
+      "paid_at": "2024-06-01T08:14:32Z"
+    },
+    {
+      "id": "pay_bbb222",
+      "tenant_id": "tnt_mno345",
+      "lease_id": "lse_uvw202",
+      "amount": 1300.00,
+      "type": "rent",
+      "method": "card",
+      "status": "paid",
+      "due_date": "2024-06-15",
+      "paid_at": "2024-06-15T10:02:18Z"
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 20,
+    "total": 2
+  }
+}
+```
+
+---
+
+## POST /payments
+
+Records a manual payment made outside the Viithii tenant portal — for example, cash, a personal check, or a money order. Creating a manual payment does not initiate any funds transfer; it only records the transaction in your account for tracking and reporting purposes.
+
+### Body Parameters
+
+<ParamField body="tenant_id" type="string" required>
+  The ID of the tenant making the payment (e.g. `tnt_xyz789`).
+</ParamField>
+
+<ParamField body="lease_id" type="string" required>
+  The ID of the lease the payment applies to (e.g. `lse_rst101`).
+</ParamField>
+
+<ParamField body="amount" type="number" required>
+  Payment amount in US dollars (e.g. `1450.00`).
+</ParamField>
+
+<ParamField body="type" type="string" required>
+  Payment type. Accepted values: `rent`, `deposit`, `late_fee`, `other`.
+</ParamField>
+
+<ParamField body="method" type="string" required>
+  Must be set to `manual` for all payments created via this endpoint.
+</ParamField>
+
+<ParamField body="note" type="string">
+  An optional note describing the payment (e.g. `"Cash payment — June 2024 rent"`).
+</ParamField>
+
+<ParamField body="paid_at" type="string">
+  The date and time the payment was received, in ISO 8601 format. Defaults to the current timestamp if omitted.
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl -X POST https://api.viithiisys.com/v1/payments \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx" \
+  -H "Content-Type: application/json" \
+  -d '{
+    "tenant_id": "tnt_xyz789",
+    "lease_id": "lse_rst101",
+    "amount": 1450.00,
+    "type": "rent",
+    "method": "manual",
+    "note": "Cash payment received in person — July 2024 rent",
+    "paid_at": "2024-07-01T09:00:00Z"
+  }'
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "pay_ccc333",
+    "tenant_id": "tnt_xyz789",
+    "lease_id": "lse_rst101",
+    "amount": 1450.00,
+    "type": "rent",
+    "method": "manual",
+    "status": "paid",
+    "note": "Cash payment received in person — July 2024 rent",
+    "due_date": "2024-07-01",
+    "paid_at": "2024-07-01T09:00:00Z",
+    "created_at": "2024-07-01T09:05:00Z"
+  }
+}
+```
+
+---
+
+## GET /payments/{id}
+
+Returns the full details of a single payment record identified by its `id`.
+
+### Path Parameters
+
+<ParamField path="id" type="string" required>
+  The unique identifier of the payment (e.g. `pay_aaa111`).
+</ParamField>
+
+### Example Request
+
+```bash curl
+curl https://api.viithiisys.com/v1/payments/pay_aaa111 \
+  -H "Authorization: Bearer vth_live_xxxxxxxxxxxx"
+```
+
+### Example Response
+
+```json
+{
+  "data": {
+    "id": "pay_aaa111",
+    "tenant_id": "tnt_xyz789",
+    "lease_id": "lse_rst101",
+    "amount": 1450.00,
+    "type": "rent",
+    "method": "ach",
+    "status": "paid",
+    "note": null,
+    "due_date": "2024-06-01",
+    "paid_at": "2024-06-01T08:14:32Z",
+    "created_at": "2024-05-28T07:00:00Z"
+  }
+}
+```
+
+<Note>
+  ACH and card payments are always initiated by tenants from the Viithii tenant portal. These transactions create payment records automatically — you do not need to create them via the API. Use `POST /payments` only to record offline payments such as cash or checks that are collected outside the portal.
+</Note>
+
+<Tip>
+  To generate a monthly rent roll for a specific property, combine the `from_date` and `to_date` query parameters with a `property_id` filter by first fetching the leases for that property, then querying payments by `lease_id`. Set `from_date` to the first day of the month and `to_date` to the last day to capture every payment due that period.
+</Tip>

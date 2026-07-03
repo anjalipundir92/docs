@@ -1,0 +1,87 @@
+---
+title: "Properties and Units in Viithii"
+sidebarTitle: "Properties"
+description: "Learn how Viithii organizes your real estate portfolio into Properties and Units — the foundation of every lease, tenant, and payment record."
+---
+
+Viithii structures your real estate portfolio around two core building blocks: **Properties** and **Units**. A Property represents a physical address or building — such as an apartment complex, a single-family home, or a commercial space — while a Unit is an individual rentable space within that property. Every lease, tenant record, and payment in Viithii traces back to a unit, which in turn belongs to a property. Getting this hierarchy right from the start keeps your data clean and your reporting accurate.
+
+## Property Types
+
+Viithii supports four property classifications. Choose the type that best describes each building when you create it, as the type influences the unit configuration options available to you.
+
+<CardGroup cols={2}>
+  <Card title="Single-Family Home" icon="house">
+    A standalone residential property occupied by one household. Single-family properties typically contain a single unit, but you can add additional units (e.g., a guest house or ADU) if needed.
+  </Card>
+  <Card title="Multi-Family Building" icon="building">
+    A residential building with two or more rentable units — duplexes, triplexes, apartment complexes, and similar structures. Each unit gets its own profile, lease, and payment schedule.
+  </Card>
+  <Card title="Commercial Property" icon="store">
+    Office buildings, retail spaces, warehouses, and other non-residential structures. Commercial units support custom lease terms and separate charge categories suited to business tenants.
+  </Card>
+  <Card title="Mixed-Use" icon="city">
+    A building combining residential and commercial spaces under one roof. Viithii lets you manage both unit types within a single property record for unified reporting.
+  </Card>
+</CardGroup>
+
+## Units
+
+A Unit is the smallest rentable entity in Viithii — the actual space a tenant occupies and pays rent for. Every unit belongs to exactly one property and carries its own set of attributes:
+
+<ResponseField name="Unit Number / Label" type="string" required>
+  A short identifier for the unit within the property — for example, `Apt 3B`, `Suite 200`, or `Unit 1`. This label appears on leases, invoices, and tenant communications.
+</ResponseField>
+
+<ResponseField name="Floor" type="integer">
+  The floor number on which the unit is located. Used for reference and search filtering within large multi-family buildings.
+</ResponseField>
+
+<ResponseField name="Bedrooms" type="integer">
+  The number of bedrooms in the unit. Used in listing descriptions and fair-housing classification.
+</ResponseField>
+
+<ResponseField name="Bathrooms" type="number">
+  The number of bathrooms, supporting half-bath increments (e.g., `1.5`).
+</ResponseField>
+
+<ResponseField name="Square Footage" type="number">
+  The rentable area of the unit in square feet. Displayed on lease agreements and marketing listings.
+</ResponseField>
+
+<ResponseField name="Rent Amount" type="number" required>
+  The default monthly rent for the unit. When you create a new lease, Viithii pre-fills the rent from this value — you can override it per lease.
+</ResponseField>
+
+<Note>
+  The **rent amount** on a unit is a default, not a binding figure. The rent that actually governs a tenancy is the amount recorded on the active lease. Updating a unit's rent amount does not retroactively change any existing lease.
+</Note>
+
+## Property Status
+
+Every property in Viithii carries one of three statuses that controls visibility and workflow behavior:
+
+<Accordion title="Active">
+  The property is live and operational. Units within an active property can be leased, and tenants can access the Tenant Portal for that property. This is the default status when you create a property.
+</Accordion>
+
+<Accordion title="Inactive">
+  The property is not currently in use — for example, a property you've sold or removed from your portfolio. Inactive properties are hidden from day-to-day dashboards but remain in your records for historical reporting. You cannot create new leases on units within an inactive property.
+</Accordion>
+
+<Accordion title="Under Maintenance">
+  The property or building is temporarily unavailable due to renovation or significant repairs. Units in this status are excluded from vacancy listings, and new leases cannot be started until the property returns to Active.
+</Accordion>
+
+<Note>
+  A **Property** is the building or address — it exists even if every unit inside it is vacant. A **Unit** is the individual rentable space within that property. Tenants sign leases on units, not on properties. Always add your units before creating leases or inviting tenants.
+</Note>
+
+<CardGroup cols={2}>
+  <Card title="Add a Property" icon="plus" href="/guides/add-property">
+    Follow the step-by-step guide to create your first property and configure its details in Viithii.
+  </Card>
+  <Card title="Manage Units" icon="door-open" href="/guides/add-property">
+    Learn how to add, edit, and deactivate units within an existing property.
+  </Card>
+</CardGroup>

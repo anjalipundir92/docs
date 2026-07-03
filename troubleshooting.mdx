@@ -1,0 +1,139 @@
+---
+title: "Troubleshooting Common Viithii Issues"
+sidebarTitle: "Troubleshooting"
+description: "Diagnose and resolve common issues with payments, the tenant portal, leases, properties, and account settings in Viithii step by step."
+---
+
+Most issues in Viithii have a straightforward fix. This guide walks you through the most frequently reported problems and the steps to resolve them quickly. If you work through the relevant section and still can't resolve your issue, reach out to the Viithii support team — contact details are at the bottom of this page.
+
+## Payments
+
+<Accordion title="A tenant's payment failed — what do I do?">
+  Payment failures happen for several reasons. Start by identifying the specific error before taking action.
+
+  **1. Find the error code**
+
+  Go to **Financials** → **Payments**, locate the failed payment, and click on it to view the **Payment Detail** page. The **Failure Reason** field displays a short error code and description.
+
+  **2. Identify the cause**
+
+  | Common Failure Reason | Meaning |
+  |---|---|
+  | **Insufficient funds** | The tenant's account didn't have enough money at the time of processing |
+  | **Incorrect bank details** | The routing or account number Plaid verified is no longer valid |
+  | **Bank block / R16** | The tenant's bank is blocking ACH debits — the tenant needs to contact their bank |
+  | **Account closed** | The bank account has been closed |
+
+  **3. Take action**
+
+  - For **insufficient funds**, contact the tenant and ask them to retry once funds are available. The tenant can initiate a new payment from the portal.
+  - For **incorrect bank details** or a **closed account**, ask the tenant to reconnect their bank account in the portal under **Payment Methods** → **Update Bank Account**.
+  - For a **bank block**, the tenant must call their bank to authorize ACH debits from Viithii's originator ID, then retry the payment.
+
+  **Automatic retry:** Viithii automatically retries failed ACH payments once, **3 business days** after the initial failure. If the retry also fails, no further automatic attempts are made and you'll receive a second failure notification.
+</Accordion>
+
+<Accordion title="I haven't received a payout yet">
+  If your expected payout hasn't arrived, work through the following checks in order:
+
+  **1. Confirm your bank account is verified**
+  Go to **Settings** → **Bank Account**. Your account status must show **Verified**. If it shows **Pending** or **Unverified**, complete the micro-deposit verification before payouts can be processed.
+
+  **2. Check the payout schedule**
+  ACH payouts take **2–3 business days** from the date the tenant's payment was processed. Payments made on Fridays or before federal holidays may take an extra day. Go to **Financials** → **Payouts** to see the scheduled arrival date for each payout.
+
+  **3. Check for processing holds**
+  New accounts may have a brief processing hold on their first 1–2 payouts as part of fraud prevention. The **Payouts** page will note if a hold is applied and when it is expected to lift.
+
+  **4. Contact support**
+  If more than **5 business days** have passed since the tenant's payment was processed and you still haven't received the payout, contact Viithii support with the payment ID. We'll trace the transaction and resolve it promptly.
+</Accordion>
+
+---
+
+## Tenant Portal
+
+<Accordion title="A tenant didn't receive the portal invitation email">
+  Portal invitations are sent automatically when you add a tenant to an active lease. If the tenant says they never received it:
+
+  **1. Ask the tenant to check their spam or junk folder.** Invitation emails occasionally get filtered, especially from new senders.
+
+  **2. Resend the invitation.** Go to **Tenants** → select the tenant's profile → click **Resend Invite**. A fresh invitation email is sent immediately.
+
+  **3. Check the email address.** On the tenant's profile page, confirm the email address on file is correct. If it's wrong, update it first, then click **Resend Invite**.
+
+  <Warning>
+    Portal invitations expire after **72 hours**. If the tenant's original invitation is older than 72 hours, it will no longer work even if they find it — always resend a fresh one.
+  </Warning>
+</Accordion>
+
+<Accordion title="A tenant can't log in to the portal">
+  If a tenant reports they're unable to sign in to the tenant portal, follow these steps:
+
+  **1. Direct them to use the Forgot Password link.**
+  On the tenant portal login page, the tenant should click **Forgot Password**, enter their email address, and follow the reset link sent to their inbox. This resolves the majority of login issues.
+
+  **2. Confirm the correct email address.**
+  The tenant must sign in using the exact email address on their Viithii portal account. Check their tenant profile in your dashboard to confirm the email on file matches what they're using to log in. If it's wrong, update the email address in their tenant profile first, then have them try the **Forgot Password** flow again.
+
+  **3. Check for an unaccepted invitation.**
+  If the tenant's profile status shows **Invitation Pending**, they haven't completed the initial account setup yet. Resend the invitation so they can finish setting up their account.
+</Accordion>
+
+---
+
+## Leases
+
+<Accordion title="An e-signature email wasn't received by a signer">
+  If a tenant or co-signer didn't receive the lease signing request:
+
+  **1.** Ask the recipient to check their spam or junk folder — signing request emails can occasionally be filtered.
+
+  **2.** Resend the signing request from your dashboard. Go to **Leases** → select the lease → click **Resend Signing Request**. Viithii sends a new email to all parties who have not yet signed.
+
+  **3.** Confirm the signer's email address on the lease is correct. If it's wrong, you'll need to void the current signing request and re-send the lease with the corrected email. Contact support to void if the lease is already partially signed.
+</Accordion>
+
+<Accordion title="I need to void a signed lease">
+  Fully executed (all parties signed) lease documents **cannot be voided directly from the Viithii interface**. This protection ensures the integrity of your legally binding agreements.
+
+  To void a signed lease, contact Viithii support and provide the lease ID. The support team will review the request and, where appropriate, perform the void on your behalf. Note that voiding a signed lease is an irreversible action and may have legal implications depending on your jurisdiction — consult your legal counsel if you're unsure.
+</Accordion>
+
+---
+
+## Properties & Units
+
+<Accordion title="I accidentally archived a property — can I restore it?">
+  Yes, archived properties can be restored at any time. No data is lost when a property is archived.
+
+  <Steps>
+    <Step title="Open the Archived Properties View">
+      Go to **Properties** in the left sidebar. At the top of the properties list, click the **Archived** filter button to display archived properties.
+    </Step>
+    <Step title="Select the Property">
+      Click on the property you want to restore.
+    </Step>
+    <Step title="Restore the Property">
+      On the property detail page, click the **Restore** button. The property immediately moves back to your active properties list, and all associated units, tenants, and leases are restored with it.
+    </Step>
+  </Steps>
+</Accordion>
+
+---
+
+## Account
+
+<Accordion title="I can't add a team member">
+  If the **Invite Member** button is greyed out or you see an error when trying to invite a team member, your current plan likely doesn't support multiple users.
+
+  The **Starter plan** is a single-user plan and does not include team access. To add team members, upgrade to the **Growth** or **Enterprise** plan, which support multiple users and role-based access.
+
+  To upgrade, go to **Settings** → **Billing** → **Upgrade Plan**. Once your plan is upgraded, return to **Settings** → **Team** to send your invitation.
+</Accordion>
+
+---
+
+<Note>
+  Still stuck? The Viithii support team is here to help. Email us at **support@viithii.com** and include your account email, a description of the issue, and any relevant property or tenant IDs. We typically respond within **1 business day** — Enterprise plan customers receive priority support with a **4-hour response time** during business hours.
+</Note>
